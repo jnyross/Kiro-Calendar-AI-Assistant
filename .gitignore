@@ -36,6 +36,7 @@ dist/
 # Build outputs
 build/
 out/
+public/
 
 # Vercel
 .vercel
