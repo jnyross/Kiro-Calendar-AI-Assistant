@@ -32,6 +32,14 @@ document.addEventListener('DOMContentLoaded', () => {
     applyTheme();
     checkAuth();
     registerServiceWorker();
+    
+    // Fallback: show auth screen after 3 seconds if still loading
+    setTimeout(() => {
+        if (!elements.loadingScreen.classList.contains('hidden')) {
+            console.warn('Loading timeout - showing auth screen');
+            showAuthScreen();
+        }
+    }, 3000);
 });
 
 // Register Service Worker
@@ -221,11 +229,18 @@ async function checkAuth() {
     }
     
     try {
+        // Add timeout to prevent hanging
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
+        
         const response = await fetch(`${API_BASE_URL}/auth/me`, {
             headers: {
                 'Authorization': `Bearer ${token}`
-            }
+            },
+            signal: controller.signal
         });
+        
+        clearTimeout(timeoutId);
         
         if (response.ok) {
             const data = await response.json();
@@ -238,6 +253,7 @@ async function checkAuth() {
         }
     } catch (error) {
         console.error('Auth check failed:', error);
+        localStorage.removeItem('token');
         showAuthScreen();
     }
 }
