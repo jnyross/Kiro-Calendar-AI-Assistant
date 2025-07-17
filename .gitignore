@@ -60,3 +60,9 @@ jest_coverage/
 
 # Local development
 server.log
+
+# Sensitive configuration files
+.kiro/settings/
+*.token
+*.key
+*secret*
