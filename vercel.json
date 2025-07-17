@@ -1,0 +1,48 @@
+{
+  "version": 2,
+  "name": "kiro-calendar-assistant",
+  "builds": [
+    {
+      "src": "api/index.js",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "/api/index.js"
+    },
+    {
+      "src": "/css/(.*)",
+      "dest": "/src/public/css/$1"
+    },
+    {
+      "src": "/js/(.*)",
+      "dest": "/src/public/js/$1"
+    },
+    {
+      "src": "/images/(.*)",
+      "dest": "/src/public/images/$1"
+    },
+    {
+      "src": "/manifest.json",
+      "dest": "/src/public/manifest.json"
+    },
+    {
+      "src": "/service-worker.js",
+      "dest": "/src/public/service-worker.js"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/src/public/index.html"
+    }
+  ],
+  "env": {
+    "NODE_ENV": "production"
+  },
+  "functions": {
+    "api/index.js": {
+      "maxDuration": 30
+    }
+  }
+}

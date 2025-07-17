@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="Kiro - Your Personal AI Calendar Assistant">
+    <meta name="theme-color" content="#4F46E5">
+    
+    <!-- PWA Meta Tags -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Kiro Calendar">
+    
+    <title>Kiro - Personal AI Calendar Assistant</title>
+    
+    <!-- Manifest -->
+    <link rel="manifest" href="/manifest.json">
+    
+    <!-- Icons -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loading-screen" class="loading-screen">
+        <div class="loading-spinner"></div>
+        <p>Loading Kiro...</p>
+    </div>
+
+    <!-- Auth Container -->
+    <div id="auth-container" class="auth-container hidden">
+        <div class="auth-card">
+            <h1 class="auth-title">Welcome to Kiro</h1>
+            <p class="auth-subtitle">Your Personal AI Calendar Assistant</p>
+            
+            <!-- Login Form -->
+            <form id="login-form" class="auth-form">
+                <div class="form-group">
+                    <label for="login-email">Email</label>
+                    <input type="email" id="login-email" name="email" required autocomplete="email">
+                </div>
+                <div class="form-group">
+                    <label for="login-password">Password</label>
+                    <input type="password" id="login-password" name="password" required autocomplete="current-password">
+                </div>
+                <button type="submit" class="btn btn-primary">Sign In</button>
+                <p class="auth-switch">
+                    Don't have an account? 
+                    <a href="#" id="show-signup">Sign up</a>
+                </p>
+            </form>
+            
+            <!-- Signup Form -->
+            <form id="signup-form" class="auth-form hidden">
+                <div class="form-group">
+                    <label for="signup-name">Name</label>
+                    <input type="text" id="signup-name" name="name" required autocomplete="name">
+                </div>
+                <div class="form-group">
+                    <label for="signup-email">Email</label>
+                    <input type="email" id="signup-email" name="email" required autocomplete="email">
+                </div>
+                <div class="form-group">
+                    <label for="signup-password">Password</label>
+                    <input type="password" id="signup-password" name="password" required autocomplete="new-password">
+                </div>
+                <button type="submit" class="btn btn-primary">Create Account</button>
+                <p class="auth-switch">
+                    Already have an account? 
+                    <a href="#" id="show-login">Sign in</a>
+                </p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Main App Container -->
+    <div id="app-container" class="app-container hidden">
+        <!-- Mobile Navigation -->
+        <nav class="mobile-nav">
+            <button class="nav-item active" data-view="calendar">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                </svg>
+                <span>Calendar</span>
+            </button>
+            <button class="nav-item" data-view="contacts">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="9" cy="7" r="4"></circle>
+                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                </svg>
+                <span>Contacts</span>
+            </button>
+            <button class="nav-item" data-view="settings">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="3"></circle>
+                    <path d="M12 1v6m0 6v6m11-11h-6m-6 0H1"></path>
+                </svg>
+                <span>Settings</span>
+            </button>
+        </nav>
+
+        <!-- Header -->
+        <header class="app-header">
+            <h1 class="app-title">Kiro</h1>
+            <button id="menu-toggle" class="menu-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </header>
+
+        <!-- Desktop Navigation -->
+        <nav class="desktop-nav">
+            <button class="nav-item active" data-view="calendar">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                </svg>
+                <span>Calendar</span>
+            </button>
+            <button class="nav-item" data-view="contacts">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="9" cy="7" r="4"></circle>
+                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                </svg>
+                <span>Contacts</span>
+            </button>
+            <button class="nav-item" data-view="settings">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="3"></circle>
+                    <path d="M12 1v6m0 6v6m11-11h-6m-6 0H1"></path>
+                </svg>
+                <span>Settings</span>
+            </button>
+        </nav>
+
+        <!-- Natural Language Input -->
+        <div class="nl-input-container">
+            <form id="nl-form" class="nl-form">
+                <input 
+                    type="text" 
+                    id="nl-input" 
+                    class="nl-input" 
+                    placeholder="Try: 'Schedule lunch with Sarah tomorrow at 1pm'"
+                    autocomplete="off"
+                >
+                <button type="submit" class="nl-submit">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="22" y1="2" x2="11" y2="13"></line>
+                        <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                    </svg>
+                </button>
+            </form>
+            <div id="nl-suggestions" class="nl-suggestions hidden"></div>
+        </div>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Calendar View -->
+            <div id="calendar-view" class="view-container active">
+                <div class="calendar-header">
+                    <button id="prev-month" class="calendar-nav">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="15 18 9 12 15 6"></polyline>
+                        </svg>
+                    </button>
+                    <h2 id="current-month" class="current-month"></h2>
+                    <button id="next-month" class="calendar-nav">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="9 18 15 12 9 6"></polyline>
+                        </svg>
+                    </button>
+                </div>
+                
+                <!-- View Toggle -->
+                <div class="view-toggle">
+                    <button class="view-btn active" data-calendar-view="month">Month</button>
+                    <button class="view-btn" data-calendar-view="week">Week</button>
+                    <button class="view-btn" data-calendar-view="day">Day</button>
+                </div>
+                
+                <!-- Calendar Grid -->
+                <div id="calendar-grid" class="calendar-grid"></div>
+                
+                <!-- Day View -->
+                <div id="day-view" class="day-view hidden"></div>
+                
+                <!-- Week View -->
+                <div id="week-view" class="week-view hidden"></div>
+            </div>
+
+            <!-- Contacts View -->
+            <div id="contacts-view" class="view-container hidden">
+                <div class="view-header">
+                    <h2>Contacts</h2>
+                    <button id="add-contact" class="btn btn-primary btn-sm">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg>
+                        Add Contact
+                    </button>
+                </div>
+                
+                <div class="search-container">
+                    <input 
+                        type="text" 
+                        id="contact-search" 
+                        class="search-input" 
+                        placeholder="Search contacts..."
+                    >
+                </div>
+                
+                <div id="contacts-list" class="contacts-list"></div>
+            </div>
+
+            <!-- Settings View -->
+            <div id="settings-view" class="view-container hidden">
+                <div class="view-header">
+                    <h2>Settings</h2>
+                </div>
+                
+                <div class="settings-section">
+                    <h3>Appearance</h3>
+                    <div class="setting-item">
+                        <label for="theme-toggle">Dark Mode</label>
+                        <input type="checkbox" id="theme-toggle" class="toggle-switch">
+                    </div>
+                </div>
+                
+                <div class="settings-section">
+                    <h3>Calendar</h3>
+                    <div class="setting-item">
+                        <label for="week-start">Week starts on</label>
+                        <select id="week-start" class="select-input">
+                            <option value="0">Sunday</option>
+                            <option value="1">Monday</option>
+                        </select>
+                    </div>
+                    <div class="setting-item">
+                        <label for="time-format">Time format</label>
+                        <select id="time-format" class="select-input">
+                            <option value="12">12-hour</option>
+                            <option value="24">24-hour</option>
+                        </select>
+                    </div>
+                    <div class="setting-item">
+                        <label>Google Calendar Integration</label>
+                        <div class="google-calendar-status">
+                            <span id="google-status" class="status-text">Not connected</span>
+                            <button id="connect-google" class="btn btn-primary">Connect Google Calendar</button>
+                            <button id="disconnect-google" class="btn btn-secondary hidden">Disconnect</button>
+                        </div>
+                    </div>
+                    <div class="setting-item">
+                        <label>Sync Actions</label>
+                        <div class="sync-actions">
+                            <button id="sync-calendar" class="btn btn-outline" disabled>Sync Calendar Events</button>
+                            <button id="sync-contacts" class="btn btn-outline" disabled>Import Google Contacts</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="settings-section">
+                    <h3>Notifications</h3>
+                    <div class="setting-item">
+                        <label for="notifications-toggle">Enable notifications</label>
+                        <input type="checkbox" id="notifications-toggle" class="toggle-switch">
+                    </div>
+                    <div class="setting-item">
+                        <label for="reminder-time">Default reminder</label>
+                        <select id="reminder-time" class="select-input">
+                            <option value="5">5 minutes before</option>
+                            <option value="10">10 minutes before</option>
+                            <option value="15">15 minutes before</option>
+                            <option value="30">30 minutes before</option>
+                            <option value="60">1 hour before</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="settings-section">
+                    <button id="logout-btn" class="btn btn-secondary">Sign Out</button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Event Modal -->
+    <div id="event-modal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-title">New Event</h3>
+                <button class="modal-close" id="close-modal">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            
+            <form id="event-form" class="event-form">
+                <div class="form-group">
+                    <label for="event-title">Title</label>
+                    <input type="text" id="event-title" name="title" required>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="event-date">Date</label>
+                        <input type="date" id="event-date" name="date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="event-time">Time</label>
+                        <input type="time" id="event-time" name="time">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="event-duration">Duration</label>
+                    <select id="event-duration" name="duration">
+                        <option value="30">30 minutes</option>
+                        <option value="60" selected>1 hour</option>
+                        <option value="90">1.5 hours</option>
+                        <option value="120">2 hours</option>
+                        <option value="180">3 hours</option>
+                        <option value="all-day">All day</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="event-location">Location</label>
+                    <input type="text" id="event-location" name="location" placeholder="Optional">
+                </div>
+                
+                <div class="form-group">
+                    <label for="event-attendees">Attendees</label>
+                    <input type="text" id="event-attendees" name="attendees" placeholder="Start typing names...">
+                    <div id="attendees-list" class="attendees-list"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="event-description">Description</label>
+                    <textarea id="event-description" name="description" rows="3" placeholder="Optional"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="event-reminder">Reminder</label>
+                    <select id="event-reminder" name="reminder">
+                        <option value="none">No reminder</option>
+                        <option value="5">5 minutes before</option>
+                        <option value="10">10 minutes before</option>
+                        <option value="15" selected>15 minutes before</option>
+                        <option value="30">30 minutes before</option>
+                        <option value="60">1 hour before</option>
+                    </select>
+                </div>
+                
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" id="cancel-event">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Event</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Contact Modal -->
+    <div id="contact-modal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="contact-modal-title">New Contact</h3>
+                <button class="modal-close" id="close-contact-modal">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            
+            <form id="contact-form" class="contact-form">
+                <div class="form-group">
+                    <label for="contact-name">Name</label>
+                    <input type="text" id="contact-name" name="name" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="contact-email">Email</label>
+                    <input type="email" id="contact-email" name="email">
+                </div>
+                
+                <div class="form-group">
+                    <label for="contact-phone">Phone</label>
+                    <input type="tel" id="contact-phone" name="phone">
+                </div>
+                
+                <div class="form-group">
+                    <label for="contact-company">Company</label>
+                    <input type="text" id="contact-company" name="company">
+                </div>
+                
+                <div class="form-group">
+                    <label for="contact-notes">Notes</label>
+                    <textarea id="contact-notes" name="notes" rows="3"></textarea>
+                </div>
+                
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" id="cancel-contact">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Contact</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- Scripts -->
+    <script src="/js/app.js"></script>
+    <script>
+        // Register Service Worker
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/service-worker.js')
+                    .then(registration => console.log('SW registered:', registration))
+                    .catch(error => console.log('SW registration failed:', error));
+            });
+        }
+    </script>
+</body>
+</html>
